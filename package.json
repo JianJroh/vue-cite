@@ -1,0 +1,68 @@
+{
+  "name": "vite-plugin-vue-cite",
+  "type": "module",
+  "version": "0.0.0",
+  "packageManager": "pnpm@11.4.0",
+  "description": "Cite-to-copy for any Vue element.",
+  "author": "JianJroh <rhjian@foxmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/JianJroh/vue-cite#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JianJroh/vue-cite.git"
+  },
+  "bugs": "https://github.com/JianJroh/vue-cite/issues",
+  "keywords": [
+    "vue",
+    "vue3",
+    "vite",
+    "vite-plugin",
+    "devtools",
+    "vue-devtools",
+    "tracer",
+    "vue-tracer",
+    "annotation",
+    "citation",
+    "cite",
+    "source-link",
+    "click-to-source",
+    "markdown",
+    "inspector"
+  ],
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./client": "./dist/client/entry.mjs",
+    "./client/vite-devtools": "./dist/client/vite-devtools.mjs"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "lint": "eslint .",
+    "play": "pnpm -C playground play",
+    "prepublishOnly": "pnpm build",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "peerDependencies": {
+    "vite": "^6.0.0 || ^7.0.0 || ^8.0.0-0",
+    "vite-plugin-vue-tracer": "^1.4.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "@vitejs/devtools-kit": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "unbuild": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-vue-tracer": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

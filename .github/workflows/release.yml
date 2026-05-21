@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    # https://github.com/sxzz/workflows/blob/a6fa84571c79c384fe4d3af4f6f7e47a033373a5/.github/workflows/release.yml
+    uses: sxzz/workflows/.github/workflows/release.yml@a6fa84571c79c384fe4d3af4f6f7e47a033373a5 # v1 (branch, repo has no tags)
+    with:
+      publish: true
+      tag: ${{ contains(github.ref_name, '-') && 'beta' || 'latest' }}
+    permissions:
+      contents: write
+      id-token: write

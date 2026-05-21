@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "play": "vite",
+    "dev": "vite",
+    "preview": "vite preview",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@vitejs/devtools": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-vue-tracer": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}
