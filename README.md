@@ -4,7 +4,7 @@
 
 [![npm version](https://img.shields.io/npm/v/vite-plugin-vue-cite?color=42b883&label=npm)](https://www.npmjs.com/package/vite-plugin-vue-cite)
 
-Click any Vue element in dev, add a note, and copy a Markdown citation with a
+Click any Vue element, add a note, and copy a Markdown citation with a
 source link. Great for design reviews, bug reports, and AI prompts.
 
 <p align="center">
@@ -76,6 +76,10 @@ export default defineConfig({
   ],
 })
 ```
+
+Try the **Standalone launcher** live:
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vue-cite-demo?file=vite.config.ts)
 
 ## ⚙️ Options
 
