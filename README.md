@@ -16,16 +16,18 @@ resolve the clicked element back to its source file and line.
 
 ## 🚀 Usage
 
-### With Vite DevTools (recommended)
+### Vite DevTools dock (recommended)
 
 Register Vue Cite as a Vite DevTools dock entry. This keeps the dev UI out of
 your viewport and groups Vue Cite next to your other DevTools panels.
 
-Prerequisites:
+Requires Vite 8+ and the `@vitejs/devtools` package:
 
-- Vite 8+
-- The DevTools package(`@vitejs/devtools`), see the
-  [Vite DevTools installation guide](https://devtools.vite.dev/guide/#installation)
+```bash
+pnpm add -D @vitejs/devtools
+```
+
+> See the [Vite DevTools installation guide](https://devtools.vite.dev/guide/#installation) for details.
 
 ```ts
 // vite.config.ts
@@ -47,7 +49,7 @@ export default defineConfig({
 
 Open the Vite DevTools dock and click the **Vue Cite** entry to arm cite mode.
 
-### With the floating launcher
+### Standalone launcher
 
 Without `viteDevtools`, Vue Cite mounts a floating launcher button on the page.
 Use this if you are not on Vite 8 yet or prefer not to install the DevTools
