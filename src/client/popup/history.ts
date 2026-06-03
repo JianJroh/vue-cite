@@ -72,7 +72,7 @@ export function createHistoryStore(options: HistoryStoreOptions = {}): HistorySt
   function add(entry: NewEntry): HistoryEntry[] {
     entries.push({
       ...entry,
-      id: makeId(),
+      id: crypto.randomUUID(),
       timestamp: Date.now(),
     })
     if (entries.length > max)
@@ -94,8 +94,4 @@ export function createHistoryStore(options: HistoryStoreOptions = {}): HistorySt
   }
 
   return { list, add, remove, clear }
-}
-
-function makeId(): string {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 }
