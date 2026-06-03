@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import logo from './assets/logo.svg'
 
 const count = ref(0)
 const message = ref('Hello Vue Cite!')
@@ -8,29 +9,27 @@ const message = ref('Hello Vue Cite!')
 <template>
   <main class="page">
     <header class="hero">
-      <h1>vite-plugin-vue-cite</h1>
-      <p>
-        Click the <span class="dot">🎯</span> button at the bottom right to enable.
-        Hover an element to see its source overlay, then click to open the popup —
-        leave a note and copy a message that includes the source trace info.
+      <h1>
+        <img :src="logo" alt="Vue Cite logo" class="logo" width="56" height="56">
+        Vue Cite
+      </h1>
+      <p class="tagline">
+        Cite-to-copy for any Vue element.
+      </p>
+      <p class="desc">
+        Click any Vue element in dev, add a note, and copy a Markdown citation with a
+        source link. Great for design reviews, bug reports, and AI prompts.
       </p>
     </header>
 
     <section class="card">
-      <h2>Counter</h2>
-      <button class="btn primary" @click="count++">
-        Click to increment
-      </button>
-      <p class="count">
-        Count: {{ count }}
-      </p>
-    </section>
-
-    <section class="card">
       <h2>Form</h2>
+      <p class="hint">
+        Cite the textarea or its label to pinpoint where each field lives.
+      </p>
       <label class="label">
         Message
-        <input v-model="message" class="input" placeholder="Type a message">
+        <textarea v-model="message" class="input" rows="3" placeholder="Type a message" />
       </label>
       <p class="echo">
         You typed: <strong>{{ message }}</strong>
@@ -38,7 +37,23 @@ const message = ref('Hello Vue Cite!')
     </section>
 
     <section class="card">
+      <h2>Counter</h2>
+      <p class="hint">
+        A reactive button — try citing it to capture its source line.
+      </p>
+      <button class="btn primary" @click="count++">
+        Increment
+      </button>
+      <p class="count">
+        Count: {{ count }}
+      </p>
+    </section>
+
+    <section class="card">
       <h2>Grid</h2>
+      <p class="hint">
+        Each tile is rendered from the same v-for — cite one to see which.
+      </p>
       <div class="grid">
         <div v-for="n in 6" :key="n" class="tile">
           Tile {{ n }}
@@ -58,16 +73,27 @@ const message = ref('Hello Vue Cite!')
   margin-bottom: 1.5rem;
 }
 .hero h1 {
-  margin: 0 0 0.5rem;
-  font-size: 1.6rem;
-  color: #197;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0 0 0.25rem;
+  font-size: 2.4rem;
+  color: #42b883;
 }
-.hero p {
+.logo {
+  display: block;
+}
+.tagline {
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+  color: #333;
+}
+.hero .desc {
   margin: 0;
   background: #f4f8ff;
   padding: 0.75rem 1rem;
   border-radius: 6px;
-  border-left: 4px solid #197;
+  border-left: 4px solid #42b883;
   color: #444;
   font-size: 14px;
   line-height: 1.5;
@@ -88,6 +114,11 @@ const message = ref('Hello Vue Cite!')
   margin: 0 0 0.75rem;
   font-size: 1rem;
   color: #333;
+}
+.hint {
+  margin: 0 0 0.75rem;
+  font-size: 13px;
+  color: #888;
 }
 .btn {
   border: 0;
@@ -117,6 +148,8 @@ const message = ref('Hello Vue Cite!')
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
 }
 .echo {
   margin-top: 0.5rem;
