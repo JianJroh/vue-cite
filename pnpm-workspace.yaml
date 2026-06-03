@@ -10,9 +10,6 @@ packages:
 allowBuilds:
   esbuild: true
 
-patchedDependencies:
-  vite-plugin-vue-tracer@1.4.0: patches/vite-plugin-vue-tracer@1.4.0.patch
-
 catalog:
   '@antfu/eslint-config': ^9.0.0
   '@types/node': ^25.8.0
