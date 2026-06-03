@@ -2,8 +2,14 @@
 
 > **Cite-to-copy for any Vue element.**
 
+[![npm version](https://img.shields.io/npm/v/vite-plugin-vue-cite?color=42b883&label=npm)](https://www.npmjs.com/package/vite-plugin-vue-cite)
+
 Click any Vue element in dev, add a note, and copy a Markdown citation with a
 source link. Great for design reviews, bug reports, and AI prompts.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/JianJroh/vue-cite/main/assets/screenshots/image.png" alt="Vue Cite in action — click an element, add a note, copy as Markdown citation" width="820">
+</p>
 
 ## 📦 Install
 
