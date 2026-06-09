@@ -17,7 +17,7 @@ const message = ref('Hello Vue Cite!')
         Cite-to-copy for any Vue element.
       </p>
       <p class="desc">
-        Click any Vue element in dev, add a note, and copy a Markdown citation with a
+        Click any Vue element, add a note, and copy a Markdown citation with a
         source link. Great for design reviews, bug reports, and AI prompts.
       </p>
     </header>
