@@ -1,5 +1,6 @@
 import type { Plugin } from 'vite'
 import type { VueCiteOptions } from './types'
+import { SHARED_STATE_KEY } from './constants'
 import { LAUNCHER_ICON_DATA_URI } from './icon'
 import { builtinTemplates } from './templates'
 
@@ -62,7 +63,7 @@ export function VueCite(options: VueCiteOptions = {}): Plugin | undefined {
     ...(viteDevtools
       ? {
           devtools: {
-            setup(ctx) {
+            async setup(ctx) {
               ctx.docks.register({
                 id: 'vue-cite',
                 title: 'Vue Cite',
@@ -73,6 +74,10 @@ export function VueCite(options: VueCiteOptions = {}): Plugin | undefined {
                   importName: 'default',
                 },
               })
+
+              // Register the shared-state key so popups use it over localStorage.
+              // In-memory only; see persistence.ts for the file-backed variant.
+              await ctx.rpc.sharedState.get(SHARED_STATE_KEY, { initialValue: { history: [], template: '' } })
             },
           },
         }

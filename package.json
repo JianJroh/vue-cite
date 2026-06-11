@@ -57,6 +57,7 @@
     "@antfu/eslint-config": "catalog:",
     "@types/node": "catalog:",
     "@vitejs/devtools-kit": "catalog:",
+    "devframe": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:",
     "unbuild": "catalog:",

@@ -1,17 +1,9 @@
-import type { PositionInfo } from 'vite-plugin-vue-tracer/client/listeners'
+import type { CiteHistoryEntry } from '../../types'
+import type { CiteStateBackend } from '../backend'
 
-const HISTORY_KEY = 'vite-plugin-vue-cite:history'
 const HISTORY_MAX = 50
 
-export interface HistoryEntry {
-  id: string
-  text: string
-  message: string
-  tag: string
-  filepath: string
-  pos: PositionInfo
-  timestamp: number
-}
+export type HistoryEntry = CiteHistoryEntry
 
 /** Fields a caller provides; the store stamps `id` and `timestamp` itself. */
 export type NewEntry = Omit<HistoryEntry, 'id' | 'timestamp'>
@@ -28,69 +20,44 @@ export interface HistoryStore {
 }
 
 export interface HistoryStoreOptions {
-  /** Where to persist. Defaults to localStorage; inject an in-memory fake in tests. */
-  storage?: Pick<Storage, 'getItem' | 'setItem'>
   /** Maximum entries retained. Defaults to 50; pass a small value for cheap cap tests. */
   max?: number
 }
 
-export function createHistoryStore(options: HistoryStoreOptions = {}): HistoryStore {
-  const { storage = localStorage, max = HISTORY_MAX } = options
+export function createHistoryStore(
+  backend: CiteStateBackend,
+  options: HistoryStoreOptions = {},
+): HistoryStore {
+  const { max = HISTORY_MAX } = options
 
-  // On-disk format is an oldest-first array (unchanged from earlier versions), so
-  // existing history survives. `list()` reverses a copy to present newest-first.
-  let entries = read()
-
-  function read(): HistoryEntry[] {
-    try {
-      const raw = storage.getItem(HISTORY_KEY)
-      if (!raw)
-        return []
-      const parsed = JSON.parse(raw)
-      if (!Array.isArray(parsed))
-        return []
-      return parsed
-    }
-    catch {
-      return []
-    }
-  }
-
-  function write(): void {
-    try {
-      storage.setItem(HISTORY_KEY, JSON.stringify(entries))
-    }
-    catch {
-      // ignore — storage may be disabled or full
-    }
-  }
-
+  // The backend keeps history oldest-first (unchanged from the original
+  // localStorage format, and how it lands on disk in viteDevtools mode);
+  // `list()` reverses a copy to present newest-first. Reading through the
+  // backend on every call keeps the list fresh under multi-client updates.
   function list(): HistoryEntry[] {
-    return entries.slice().reverse()
+    return backend.get().history.slice().reverse()
+  }
+
+  // every mutation commits through the backend and returns the fresh list
+  function commit(fn: (history: HistoryEntry[]) => HistoryEntry[]): HistoryEntry[] {
+    backend.mutate((state) => {
+      state.history = fn(state.history)
+    })
+    return list()
   }
 
   function add(entry: NewEntry): HistoryEntry[] {
-    entries.push({
-      ...entry,
-      id: crypto.randomUUID(),
-      timestamp: Date.now(),
-    })
-    if (entries.length > max)
-      entries = entries.slice(-max)
-    write()
-    return list()
+    return commit(history => history
+      .concat({ ...entry, id: crypto.randomUUID(), timestamp: Date.now() })
+      .slice(-max))
   }
 
   function remove(id: string): HistoryEntry[] {
-    entries = entries.filter(en => en.id !== id)
-    write()
-    return list()
+    return commit(history => history.filter(en => en.id !== id))
   }
 
   function clear(): HistoryEntry[] {
-    entries = []
-    write()
-    return list()
+    return commit(() => [])
   }
 
   return { list, add, remove, clear }

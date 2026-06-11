@@ -1,6 +1,7 @@
 import type { ElementTraceInfo } from 'vite-plugin-vue-tracer/client/listeners'
 import type { TemplateEntry } from '../../types'
 import { state as overlayState } from 'vite-plugin-vue-tracer/client/overlay'
+import { getActiveBackend } from '../backend'
 import { renderEntry } from '../helpers'
 import { isCiteModeActive } from '../state'
 import { attachAnchored, detachAnchored } from './anchor'
@@ -8,9 +9,8 @@ import { stopDismiss, watchDismiss } from './dismiss'
 import { createHistoryStore } from './history'
 import { CHECK_ICON, POPUP_WIDTH, renderHtml, renderRow } from './view'
 
-const TEMPLATE_KEY = 'vite-plugin-vue-cite:template'
-
 let host: HTMLDivElement | undefined
+let offBackendUpdate: (() => void) | undefined
 
 export function isPopupOpen(): boolean {
   return !!host
@@ -19,8 +19,9 @@ export function isPopupOpen(): boolean {
 export function createPopup(info: ElementTraceInfo, templates: TemplateEntry[]): void {
   closePopup()
 
-  let currentIndex = resolveInitialIndex(templates)
-  const history = createHistoryStore()
+  const backend = getActiveBackend()
+  let currentIndex = resolveInitialIndex(templates, backend.get().template)
+  const history = createHistoryStore(backend)
 
   host = document.createElement('div')
   // mark for vue-tracer to ignore, and as a hook for our own selectors
@@ -101,12 +102,9 @@ export function createPopup(info: ElementTraceInfo, templates: TemplateEntry[]):
     currentIndex = (currentIndex + 1) % templates.length
     const next = templates[currentIndex]
     nameSpan.textContent = next.name
-    try {
-      localStorage.setItem(TEMPLATE_KEY, next.name)
-    }
-    catch {
-      // ignore — storage may be disabled
-    }
+    backend.mutate((state) => {
+      state.template = next.name
+    })
     textarea.focus()
   })
 
@@ -144,6 +142,14 @@ export function createPopup(info: ElementTraceInfo, templates: TemplateEntry[]):
     setTimeout(closePopup, 600)
   })
 
+  // keep the history list live while another client (tab / browser) mutates
+  // the shared state; local mutations re-render explicitly, so the extra
+  // render they also trigger here is an idempotent no-op
+  offBackendUpdate = backend.onUpdate(() => {
+    if (!historyView.hidden)
+      renderHistoryList()
+  })
+
   document.body.appendChild(host)
   textarea.focus()
 
@@ -153,6 +159,8 @@ export function createPopup(info: ElementTraceInfo, templates: TemplateEntry[]):
 export function closePopup(): void {
   stopDismiss()
   detachAnchored()
+  offBackendUpdate?.()
+  offBackendUpdate = undefined
   if (host) {
     host.remove()
     host = undefined
@@ -166,16 +174,9 @@ export function closePopup(): void {
   isCiteModeActive.value = false
 }
 
-function resolveInitialIndex(templates: TemplateEntry[]): number {
+function resolveInitialIndex(templates: TemplateEntry[], stored: string): number {
   if (templates.length === 0)
     return -1
-  let stored: string | null = null
-  try {
-    stored = localStorage.getItem(TEMPLATE_KEY)
-  }
-  catch {
-    // ignore
-  }
   if (stored) {
     const idx = templates.findIndex(t => t.name === stored)
     if (idx >= 0)

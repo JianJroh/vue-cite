@@ -21,6 +21,9 @@ catalogs:
     '@vitejs/plugin-vue':
       specifier: ^6.0.6
       version: 6.0.7
+    devframe:
+      specifier: 0.2.2
+      version: 0.2.2
     eslint:
       specifier: ^10.3.0
       version: 10.4.0
@@ -56,6 +59,9 @@ importers:
       '@vitejs/devtools-kit':
         specifier: 'catalog:'
         version: 0.1.24(typescript@6.0.3)(vite@8.0.13)
+      devframe:
+        specifier: 'catalog:'
+        version: 0.2.2(typescript@6.0.3)
       eslint:
         specifier: 'catalog:'
         version: 10.4.0(jiti@2.7.0)
