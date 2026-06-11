@@ -10,6 +10,48 @@ const SWITCH_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 const HISTORY_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>`
 const BACK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`
 
+const GLASS_FILTER_SVG = `<svg class="glass-defs" aria-hidden="true" focusable="false"><defs><filter id="vc-liquid-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="2" seed="42" result="noise"/><feGaussianBlur in="noise" stdDeviation="0.5" result="blurred"/><feDisplacementMap in="SourceGraphic" in2="blurred" scale="34" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>`
+
+const LIQUID_GLASS_STYLES = `
+.glass-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+.liquid-glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow:
+    var(--vc-shadow, 0 0 rgba(0, 0, 0, 0)),
+    inset 2px 2px 1px -1px rgba(255, 255, 255, 0.98),
+    inset -2px -2px 2px -2px rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+.liquid-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: rgba(245, 245, 245, 0.4);
+  -webkit-backdrop-filter: blur(6px) saturate(1.6);
+  backdrop-filter: blur(6px) saturate(1.6);
+  filter: url(#vc-liquid-glass);
+}
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.5), transparent 42%);
+  box-shadow: inset 0 -1px 0 0 rgba(15, 23, 42, 0.06);
+}
+.liquid-glass > * { position: relative; z-index: 2; }
+`
+
 const POPUP_STYLES = `
 :host {
   all: initial;
@@ -213,11 +255,13 @@ textarea::placeholder { color: var(--vc-placeholder); }
   pointer-events: auto;
 }
 .row-delete:hover { background-color: rgba(168, 25, 25, 0.1); color: var(--vc-danger); }
+${LIQUID_GLASS_STYLES}
 `
 
 export function renderHtml(initialName: string): string {
   return `<style>${POPUP_STYLES}</style>
-<div class="card">
+${GLASS_FILTER_SVG}
+<div class="card liquid-glass">
   <div class="compose-view">
     <div class="input">
       <textarea placeholder="Prompt..."></textarea>
