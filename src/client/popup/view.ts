@@ -185,6 +185,7 @@ textarea::placeholder { color: var(--vc-placeholder); }
   gap: 2px;
   overflow-y: auto;
   scrollbar-width: thin;
+  scrollbar-color: rgba(15, 23, 42, 0.2) transparent;
   max-height: 280px;
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 12px;
