@@ -53,8 +53,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      # Generate the GitHub Release notes from conventional commits
-      - run: npx changelogithub
+      # Generate the GitHub Release notes from conventional commits.
+      # Pass `--to` explicitly: the tag was created via the GitHub API, so the
+      # local checkout (fetched with fetch-depth: 0, so v0.2.0 etc. are known)
+      # can't tag --points-at its HEAD as the new tag. Without --to,
+      # changelogithub would fall back to "HEAD" and skip the release.
+      - run: npx changelogithub --to "v${{ steps.version.outputs.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
