@@ -2,7 +2,7 @@
   "name": "vite-plugin-vue-cite",
   "type": "module",
   "version": "0.2.0",
-  "packageManager": "pnpm@11.4.0",
+  "packageManager": "pnpm@11.23.0",
   "description": "Cite-to-copy for any Vue element.",
   "author": "JianJroh <rhjian@foxmail.com>",
   "license": "MIT",
