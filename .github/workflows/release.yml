@@ -63,4 +63,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Publish with npm OIDC trusted publishing (no NPM_TOKEN needed).
-      - run: pnpm publish --access public
+      # --no-git-checks: the checkout above points at the merge commit (detached
+      # HEAD), which fails pnpm's default publish-branch git check.
+      - run: pnpm publish --no-git-checks --access public
